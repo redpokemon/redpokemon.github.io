@@ -17,6 +17,14 @@
   <body>
     <div id="map"></div>
     <script>
+        function parseGetArgs(line) {
+            var vars = {};
+            var parts = line.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+                function (m, key, value) {
+                    vars[key] = value;
+                });
+            return vars;
+        }
         function initMap() {
             var map = new google.maps.Map(document.getElementById('map'), {
                 center: {lat: 59.9342802, lng:30.3350986},
@@ -48,8 +56,20 @@
                 }
                 
             }
-            load_markers('gyms.json', 'gym.svg');
-            load_markers('stops.json', 'stop.svg');
+            args = parseGetArgs(document.baseURI)
+            if ('show' in args){
+                if (args['show'].startsWith('gym')) {
+                    load_markers('gyms.json', 'gym.svg');
+                }
+                if (args['show'].startsWith('stop')) {
+                    load_markers('stops.json', 'stop.svg');
+                }
+
+            }
+            else {
+                load_markers('gyms.json', 'gym.svg');
+                load_markers('stops.json', 'stop.svg');
+            }
     }
 
     </script>
